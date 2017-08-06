@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Profeta</string>
+    <string name="welcome_app">Welcome</string>
+    <string name="title_activity_main">Profeta da bola</string>
+
+    <string name="USERNAME_ADMIN">android</string>
+    <string name="PASSWORD_ADMIN">mobile</string>
+
+    <!-- Menu-->
+    <string name="menu_about">About</string>
+    <string name="menu_title_application">Application</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- About-->
+    <string name="title_activity_about">About</string>
+    <string name="label_contato">Contact</string>
+    <string name="label_numero_contato">+55 (11) 99650-9610</string>
+    <string name="label_copyright">Copyright © 2017 by Rafael Valverde</string>
+
+    <!-- Games -->
+    <string name="divider_vs">x</string>
+
+    <!-- Maps -->
+    <string name="title_activity_maps">Map</string>
+    <string name="message_no_locality">Could not find location</string>
+
+    <!-- Sign in -->
+    <string name="button_sign_in">Sign in</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="empty_email">The email field is empty</string>
+    <string name="empty_password">The password field is empty</string>
+    <string name="error_incorrect_signin">Incorrect user and/or password</string>
+    <string name="hint_username">username</string>
+    <string name="hint_password">password</string>
+
+    <!--Facebook-->
+    <string name="facebook_app_id">165584313989374</string>
+    <string name="fb_login_protocol_scheme">fb165584313989374</string>
+
+    <!--Crashlytics
+    <string name="fabric_apiKey">10f095e76ef3f4b8f530fcf41963c0f84cec7441</string>-->
+
+
+
+</resources>
