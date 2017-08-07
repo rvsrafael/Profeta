@@ -70,7 +70,11 @@ public class SignInActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(SignInActivity.this, "onSuccess - Deu bom", Toast.LENGTH_LONG).show();
                 Profile profile = Profile.getCurrentProfile();
-                Navigator.startGames(getApplicationContext(), profile.getFirstName());
+                if (profile != null){
+                    Navigator.startGames(getApplicationContext(), profile.getFirstName());
+                } else {
+                    Navigator.startGames(getApplicationContext(), "");
+                }
             }
 
             @Override
@@ -126,7 +130,12 @@ public class SignInActivity extends AppCompatActivity {
 
         if (isLoggedInFacebook()){
             Profile profile = Profile.getCurrentProfile();
-            Navigator.startGames(getApplicationContext(), profile.getFirstName());
+            if (profile != null){
+                Navigator.startGames(getApplicationContext(), profile.getFirstName());
+            } else {
+                Navigator.startGames(getApplicationContext(), "");
+            }
+
         } else {
             setupFacebook();
         }
