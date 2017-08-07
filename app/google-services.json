@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "539212248287",
+    "firebase_url": "https://profeta-da-bola.firebaseio.com",
+    "project_id": "profeta-da-bola",
+    "storage_bucket": "profeta-da-bola.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539212248287:android:cf62dc9084790284",
+        "android_client_info": {
+          "package_name": "com.profetadabola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539212248287-b60ooh9uml6nq6f7rnhs8rqgcgu3fvor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6X02hozpPFzmLOUIoIH0-j987DOJtPho"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
