@@ -163,6 +163,7 @@ public class GameActivity extends AppCompatActivity
                 .setAction("Action", null).show();
 
         mAdapter.update(games, true);
+
     }
 
     static final ButterKnife.Action<View> DISABLE = new ButterKnife.Action<View>() {

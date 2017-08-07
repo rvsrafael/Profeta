@@ -2,8 +2,11 @@ package com.profetadabola;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.hawk.Hawk;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainApplication extends Application {
 
@@ -12,7 +15,7 @@ public class MainApplication extends Application {
         super.onCreate();
         setupStetho();
         setupHawk();
-//        setupCrashlytics();
+        setupCrashlytics();
     }
 
     private void setupStetho() {
@@ -23,7 +26,7 @@ public class MainApplication extends Application {
         Stetho.initializeWithDefaults(this);
     }
 
-//    private void setupCrashlytics() {
-//        Fabric.with(this, new Crashlytics());
-//    }
+    private void setupCrashlytics() {
+        Fabric.with(this, new Crashlytics());
+    }
 }
