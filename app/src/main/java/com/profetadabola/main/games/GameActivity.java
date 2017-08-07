@@ -52,9 +52,6 @@ public class GameActivity extends AppCompatActivity
     @BindView(R.id.recyclerview_games)
     RecyclerView recyclerviewGames;
 
-//    @BindViews({ R.id.button_less_teamA, R.id.button_more_teamA, R.id.button_less_teamB, R.id.button_more_teamB })
-//    Button buttonLessTeamA;
-
     private GameAdapter mAdapter;
     private API mService;
     private double latitude;
