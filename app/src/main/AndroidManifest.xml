@@ -24,10 +24,10 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <!--<meta-data-->
-            <!--android:name="io.fabric.ApiKey"-->
-            <!--android:value="10f095e76ef3f4b8f530fcf41963c0f84cec7441"-->
-            <!--/>-->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="10f095e76ef3f4b8f530fcf41963c0f84cec7441"
+            />
 
         <activity
             android:name=".launch.SplashActivity"
