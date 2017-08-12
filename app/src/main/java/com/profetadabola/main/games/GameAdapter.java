@@ -6,22 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.profetadabola.R;
 import com.profetadabola.api.model.EighthGamesResponse;
-import com.profetadabola.tools.DateHelp;
 import com.squareup.picasso.Picasso;
 
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder>  {
 
-    private final OnItemClickListener listener;
+    private final OnItemClickListenerMap listenerMap;
     private EighthGamesResponse games;
     private boolean isVisibility;
 
-    public GameAdapter(EighthGamesResponse games, OnItemClickListener listener) {
+    public GameAdapter(EighthGamesResponse games, OnItemClickListenerMap listener) {
         this.games = games;
-        this.listener = listener;
+        this.listenerMap = listener;
     }
 
     @Override
@@ -56,10 +56,10 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 .error(R.drawable.ic_menu_gallery)
                 .into(holder.imageViewFlagTeamB);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.linearlayoutFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(games.getGames().get(position));
+                listenerMap.onItemClick(games.getGames().get(position));
             }
         });
 
@@ -106,6 +106,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         public Button buttonMoreTeamA;
         public Button buttonMoreTeamB;
         public Button buttonLessTeamB;
+        public LinearLayout linearlayoutFooter;
 
 
 
@@ -123,6 +124,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             buttonLessTeamB = (Button) itemView.findViewById(R.id.button_less_teamB);
             buttonMoreTeamA = (Button) itemView.findViewById(R.id.button_more_teamA);
             buttonMoreTeamB = (Button) itemView.findViewById(R.id.button_more_teamB);
+            linearlayoutFooter = (LinearLayout) itemView.findViewById(R.id.linearlayout_footer);
 
         }
 

@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.profetadabola.Navigator;
@@ -26,10 +25,7 @@ import com.profetadabola.api.APITools;
 import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.api.model.EighthGamesResponse;
 
-import java.util.List;
-
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
@@ -82,7 +78,7 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void setupAdapterGames() {
-        mAdapter = new GameAdapter(new EighthGamesResponse(), new OnItemClickListener() {
+        mAdapter = new GameAdapter(new EighthGamesResponse(), new OnItemClickListenerMap() {
             @Override
             public void onItemClick(GameResponse game) {
                 latitude = game.getLatitude();
