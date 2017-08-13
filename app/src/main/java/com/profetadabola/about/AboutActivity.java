@@ -54,7 +54,7 @@ public class AboutActivity extends AppCompatActivity {
     void callPhone(){
         String versionName = BuildConfig.VERSION_NAME;
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.putExtra("ersion",versionName);
+        callIntent.putExtra("version",versionName);
         callIntent.setData(Uri.parse("tel:11996509610"));
 
         if (ActivityCompat.checkSelfPermission(AboutActivity.this,
