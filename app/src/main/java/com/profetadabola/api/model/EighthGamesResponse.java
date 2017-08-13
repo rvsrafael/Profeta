@@ -11,13 +11,13 @@ import java.util.List;
 public class EighthGamesResponse {
 
     @SerializedName("eighthGames")
-    private List<GameResponse> travel;
+    private List<GameResponse> games;
 
     public List<GameResponse> getGames() {
-        return travel;
+        return games;
     }
 
-    public void setTravel(List<GameResponse> travel) {
-        this.travel = travel;
+    public void setTravel(List<GameResponse> games) {
+        this.games = games;
     }
 }

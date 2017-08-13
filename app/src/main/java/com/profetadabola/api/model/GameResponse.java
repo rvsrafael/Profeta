@@ -41,7 +41,7 @@ public class GameResponse {
         this.teamA = teamA;
     }
 
-    public TeamResponse getTeamb() {
+    public TeamResponse getTeamB() {
         return teamb;
     }
 

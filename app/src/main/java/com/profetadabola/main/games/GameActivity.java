@@ -2,9 +2,10 @@ package com.profetadabola.main.games;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -48,6 +49,9 @@ public class GameActivity extends AppCompatActivity
     @BindView(R.id.recyclerview_games)
     RecyclerView recyclerviewGames;
 
+    @BindView(R.id.fab)
+    FloatingActionButton fabGame;
+
     private GameAdapter mAdapter;
     private API mService;
     private double latitude;
@@ -75,19 +79,72 @@ public class GameActivity extends AppCompatActivity
         setupGames();
         loadGames();
         setupAdapterGames();
+        setupFab();
+    }
+
+    private void setupFab() {
+        fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
     }
 
     private void setupAdapterGames() {
         mAdapter = new GameAdapter(new EighthGamesResponse(), new OnItemClickListenerMap() {
             @Override
-            public void onItemClick(GameResponse game) {
-                latitude = game.getLatitude();
-                longitude = game.getLongitude();
-                titlePin = game.getStadium();
-                Navigator.startMaps(context,latitude,longitude,titlePin);
+            public void onItemClick(GameResponse game, GameAction gameAction, int position) {
+
+                switch (gameAction)
+                {
+                    case TEAM_A_GOAL_LESS: {
+                        lessGoalTeamA(game, position);
+                        break;
+                    }
+                    case TEAM_A_GOAL_MORE: {
+                        moreGoalTeamA(game, position);
+                        break;
+                    }
+                    case TEAM_B_GOAL_LESS: {
+                        lessGoalTeamB(game, position);
+                        break;
+                    }
+                    case TEAM_B_GOAL_MORE: {
+                        moreGoalTeamB(game, position);
+                        break;
+                    }
+                    case TEAM_MAP: {
+                        latitude = game.getLatitude();
+                        longitude = game.getLongitude();
+                        titlePin = game.getStadium();
+                        Navigator.startMaps(context,latitude,longitude,titlePin);
+                        break;
+                    }
+                }
             }
         });
     }
+
+    private void moreGoalTeamB(GameResponse game, int position) {
+        int newGoal = Integer.parseInt(game.getTeamB().getGoal())-1;
+        games.getGames().get(position).getTeamB().setGoal(String.valueOf(newGoal));
+        mAdapter.update(games, false);
+    }
+
+    private void lessGoalTeamB(GameResponse game, int position) {
+        int newGoal = Integer.parseInt(game.getTeamB().getGoal())+1;
+        games.getGames().get(position).getTeamB().setGoal(String.valueOf(newGoal));
+        mAdapter.update(games, false);
+    }
+
+    private void lessGoalTeamA(GameResponse game, int position) {
+        int newGoal = Integer.parseInt(game.getTeamA().getGoal())-1;
+        games.getGames().get(position).getTeamA().setGoal(String.valueOf(newGoal));
+        mAdapter.update(games, false);
+    }
+
+    private void moreGoalTeamA(GameResponse game, int position) {
+        int newGoal = Integer.parseInt(game.getTeamA().getGoal())+1;
+        games.getGames().get(position).getTeamA().setGoal(String.valueOf(newGoal));
+        mAdapter.update(games, false);
+    }
+
 
     private void setupGames() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -152,11 +209,14 @@ public class GameActivity extends AppCompatActivity
 
     @OnClick(R.id.fab)
     void fab(View view){
-        Snackbar.make(view, "Atualize seus palpites para oitavas de final da copa do mundo.", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-
         mAdapter.update(games, true);
 
+        if ( fabGame.getDrawable() ==
+                getResources().getDrawable(R.drawable.ic_edit) ){
+            fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
+        } else {
+            fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_done));
+        }
     }
 
     static final ButterKnife.Action<View> DISABLE = new ButterKnife.Action<View>() {

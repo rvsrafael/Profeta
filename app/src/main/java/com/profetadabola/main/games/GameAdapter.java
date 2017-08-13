@@ -35,9 +35,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     @Override
     public void onBindViewHolder(GameViewHolder holder, final int position) {
         holder.textviewLabelTeamA.setText(games.getGames().get(position).getTeamA().getName());
-        holder.textviewLabelTeamB.setText(games.getGames().get(position).getTeamb().getName());
+        holder.textviewLabelTeamB.setText(games.getGames().get(position).getTeamB().getName());
         holder.textviewLabelGoalA.setText(games.getGames().get(position).getTeamA().getGoal());
-        holder.textviewLabelGoalB.setText(games.getGames().get(position).getTeamb().getGoal());
+        holder.textviewLabelGoalB.setText(games.getGames().get(position).getTeamB().getGoal());
         holder.textviewLabelStadium.setText(games.getGames().get(position).getStadium());
 
 
@@ -51,7 +51,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 .into(holder.imageViewFlagTeamA);
 
         Picasso.with(holder.itemView.getContext())
-                .load(games.getGames().get(position).getTeamb().getIcon())
+                .load(games.getGames().get(position).getTeamB().getIcon())
                 .placeholder(R.drawable.ic_menu_gallery)
                 .error(R.drawable.ic_menu_gallery)
                 .into(holder.imageViewFlagTeamB);
@@ -59,10 +59,37 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         holder.linearlayoutFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listenerMap.onItemClick(games.getGames().get(position));
+                listenerMap.onItemClick(games.getGames().get(position), GameAction.TEAM_MAP, position);
             }
         });
 
+        holder.buttonLessTeamA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenerMap.onItemClick(games.getGames().get(position), GameAction.TEAM_A_GOAL_LESS, position);
+            }
+        });
+
+        holder.buttonMoreTeamA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenerMap.onItemClick(games.getGames().get(position), GameAction.TEAM_A_GOAL_MORE, position);
+            }
+        });
+
+        holder.buttonLessTeamB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenerMap.onItemClick(games.getGames().get(position), GameAction.TEAM_B_GOAL_LESS, position);
+            }
+        });
+
+        holder.buttonMoreTeamB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenerMap.onItemClick(games.getGames().get(position), GameAction.TEAM_B_GOAL_MORE, position);
+            }
+        });
 
         if (isVisibility){
             holder.buttonLessTeamA.setVisibility(View.VISIBLE);
