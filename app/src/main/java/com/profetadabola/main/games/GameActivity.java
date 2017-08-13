@@ -87,7 +87,7 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void setupAdapterGames() {
-        mAdapter = new GameAdapter(new EighthGamesResponse(), new OnItemClickListenerMap() {
+        mAdapter = new GameAdapter(new EighthGamesResponse(), context, new OnItemClickListenerMap() {
             @Override
             public void onItemClick(GameResponse game, GameAction gameAction, int position) {
 
@@ -122,27 +122,31 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void moreGoalTeamB(GameResponse game, int position) {
-        int newGoal = Integer.parseInt(game.getTeamB().getGoal())-1;
+        int newGoal = Integer.parseInt(game.getTeamB().getGoal())+1;
         games.getGames().get(position).getTeamB().setGoal(String.valueOf(newGoal));
-        mAdapter.update(games, false);
+        mAdapter.update(games, GameAction.TEAM_B_GOAL_MORE);
     }
 
     private void lessGoalTeamB(GameResponse game, int position) {
-        int newGoal = Integer.parseInt(game.getTeamB().getGoal())+1;
-        games.getGames().get(position).getTeamB().setGoal(String.valueOf(newGoal));
-        mAdapter.update(games, false);
+        if (Integer.parseInt(game.getTeamB().getGoal()) > 0) {
+            int newGoal = Integer.parseInt(game.getTeamB().getGoal())-1;
+            games.getGames().get(position).getTeamB().setGoal(String.valueOf(newGoal));
+        }
+        mAdapter.update(games, GameAction.TEAM_B_GOAL_LESS);
     }
 
     private void lessGoalTeamA(GameResponse game, int position) {
-        int newGoal = Integer.parseInt(game.getTeamA().getGoal())-1;
-        games.getGames().get(position).getTeamA().setGoal(String.valueOf(newGoal));
-        mAdapter.update(games, false);
+        if (Integer.parseInt(game.getTeamA().getGoal()) > 0) {
+            int newGoal = Integer.parseInt(game.getTeamA().getGoal())-1;
+            games.getGames().get(position).getTeamA().setGoal(String.valueOf(newGoal));
+        }
+        mAdapter.update(games, GameAction.TEAM_A_GOAL_LESS);
     }
 
     private void moreGoalTeamA(GameResponse game, int position) {
         int newGoal = Integer.parseInt(game.getTeamA().getGoal())+1;
         games.getGames().get(position).getTeamA().setGoal(String.valueOf(newGoal));
-        mAdapter.update(games, false);
+        mAdapter.update(games, GameAction.TEAM_A_GOAL_MORE);
     }
 
 
@@ -175,7 +179,7 @@ public class GameActivity extends AppCompatActivity
                     @Override
                     public void onNext(EighthGamesResponse game) {
                         games = game;
-                        mAdapter.update(game, false);
+                        mAdapter.update(game, GameAction.TEAM_DONE);
                     }
                 });
     }
@@ -209,12 +213,12 @@ public class GameActivity extends AppCompatActivity
 
     @OnClick(R.id.fab)
     void fab(View view){
-        mAdapter.update(games, true);
 
-        if ( fabGame.getDrawable() ==
-                getResources().getDrawable(R.drawable.ic_edit) ){
+        if (GameAdapter.isVisibility){
+            mAdapter.update(games, GameAction.TEAM_DONE);
             fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
         } else {
+            mAdapter.update(games, GameAction.TEAM_EDIT);
             fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_done));
         }
     }

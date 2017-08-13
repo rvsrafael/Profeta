@@ -1,5 +1,7 @@
 package com.profetadabola.main.games;
 
+import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +11,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.profetadabola.Navigator;
 import com.profetadabola.R;
 import com.profetadabola.api.model.EighthGamesResponse;
+import com.profetadabola.tools.DateUtil;
 import com.squareup.picasso.Picasso;
 
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder>  {
 
     private final OnItemClickListenerMap listenerMap;
     private EighthGamesResponse games;
-    private boolean isVisibility;
+    public static boolean isVisibility;
+    private Context context;
 
-    public GameAdapter(EighthGamesResponse games, OnItemClickListenerMap listener) {
+    public GameAdapter(EighthGamesResponse games,Context context, OnItemClickListenerMap listener) {
         this.games = games;
         this.listenerMap = listener;
+        this.context = context;
     }
 
     @Override
@@ -41,8 +47,10 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         holder.textviewLabelStadium.setText(games.getGames().get(position).getStadium());
 
 
-        holder.textviewLabelDate.setText(games.getGames().get(position).getDate());
-
+        String dateFormat = DateUtil.formatDateGame(games.getGames().get(position).getDate());
+        if (dateFormat != null) {
+            holder.textviewLabelDate.setText(dateFormat);
+        }
 
         Picasso.with(holder.itemView.getContext())
                 .load(games.getGames().get(position).getTeamA().getIcon())
@@ -108,14 +116,40 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     public int getItemCount() {
         return games.getGames().size();
     }
-    public void update(EighthGamesResponse items, boolean isVisibilityCard) {
 
-        if (isVisibility)
-            isVisibility = false;
-        else
-            isVisibility = true;
+    public void update(EighthGamesResponse items, GameAction action) {
 
-//        isVisibility = isVisibilityCard;
+        switch (action) {
+            case TEAM_A_GOAL_LESS: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_A_GOAL_MORE: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_B_GOAL_LESS: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_B_GOAL_MORE: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_MAP: {
+                isVisibility = false;
+                break;
+            }
+            case TEAM_EDIT: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_DONE: {
+                isVisibility = false;
+                break;
+            }
+        }
+
         games = items;
         notifyDataSetChanged();
     }
@@ -134,6 +168,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         public Button buttonMoreTeamB;
         public Button buttonLessTeamB;
         public LinearLayout linearlayoutFooter;
+        public FloatingActionButton fabGame;
 
 
 
@@ -152,7 +187,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             buttonMoreTeamA = (Button) itemView.findViewById(R.id.button_more_teamA);
             buttonMoreTeamB = (Button) itemView.findViewById(R.id.button_more_teamB);
             linearlayoutFooter = (LinearLayout) itemView.findViewById(R.id.linearlayout_footer);
-
+            fabGame = (FloatingActionButton) itemView.findViewById(R.id.fab);
         }
 
 
