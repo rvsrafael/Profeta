@@ -25,6 +25,7 @@ import com.profetadabola.api.API;
 import com.profetadabola.api.APITools;
 import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.api.model.EighthGamesResponse;
+import com.profetadabola.tools.PersistenceHawk;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,7 +78,6 @@ public class GameActivity extends AppCompatActivity
         setupNavigation();
         loadGames();
         setupGames();
-        loadGames();
         setupAdapterGames();
         setupFab();
     }
@@ -87,6 +87,7 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void setupAdapterGames() {
+
         mAdapter = new GameAdapter(new EighthGamesResponse(), context, new OnItemClickListenerMap() {
             @Override
             public void onItemClick(GameResponse game, GameAction gameAction, int position) {
@@ -159,29 +160,39 @@ public class GameActivity extends AppCompatActivity
 
     public void loadGames() {
         mService = APITools.getAPI();
-        mService.getAllGames()
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<EighthGamesResponse>() {
-                    @Override
-                    public void onCompleted() {
-                        setupGames();
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getApplicationContext(), "Ocorreu uma falha",
-                                Toast.LENGTH_LONG).show();
-                        Log.e("MAPS", e.getMessage());
-                    }
+        EighthGamesResponse roundOf16 = PersistenceHawk.getSteps(GameStep.ROUND_OF_16);
 
-                    @Override
-                    public void onNext(EighthGamesResponse game) {
-                        games = game;
-                        mAdapter.update(game, GameAction.TEAM_DONE);
-                    }
-                });
+        if(roundOf16 == null || roundOf16.getGames().size() <= 0) {
+            mService.getAllGames()
+                    .subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<EighthGamesResponse>() {
+                        @Override
+                        public void onCompleted() {
+                            setupGames();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(getApplicationContext(), "Ocorreu uma falha",
+                                    Toast.LENGTH_LONG).show();
+                            Log.e("MAPS", e.getMessage());
+                        }
+
+                        @Override
+                        public void onNext(EighthGamesResponse game) {
+                            games = game;
+                            mAdapter.update(game, GameAction.TEAM_DONE);
+                        }
+                    });
+        } else {
+            setupAdapterGames();
+            games = roundOf16;
+            mAdapter.update(games, GameAction.TEAM_DONE);
+        }
+
     }
 
     private void loadingArguments(Bundle savedInstanceState) {
@@ -216,9 +227,11 @@ public class GameActivity extends AppCompatActivity
 
         if (GameAdapter.isVisibility){
             mAdapter.update(games, GameAction.TEAM_DONE);
+            PersistenceHawk.setSteps(GameStep.ROUND_OF_16, games);
             fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
         } else {
             mAdapter.update(games, GameAction.TEAM_EDIT);
+            setupAdapterGames();
             fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_done));
         }
     }
