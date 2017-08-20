@@ -68,7 +68,7 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(SignInActivity.this, "onSuccess - Deu bom", Toast.LENGTH_LONG).show();
+                //Toast.makeText(SignInActivity.this, "onSuccess - Deu bom", Toast.LENGTH_LONG).show();
                 Profile profile = Profile.getCurrentProfile();
                 if (profile != null){
                     Navigator.startGames(getApplicationContext(), profile.getFirstName());
@@ -79,12 +79,12 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(SignInActivity.this, "onCancel - Desistiu", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignInActivity.this, R.string.cancel_conection_login, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(SignInActivity.this, "onError - Deu ruim", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignInActivity.this, R.string.error_conection_login, Toast.LENGTH_LONG).show();
 
             }
         });

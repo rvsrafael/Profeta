@@ -60,6 +60,7 @@ public class GameActivity extends AppCompatActivity
     private String titlePin;
     private Context context;
     private EighthGamesResponse games;
+    private EighthGamesResponse gamesDB;
 
 
     @Override
@@ -161,9 +162,9 @@ public class GameActivity extends AppCompatActivity
     public void loadGames() {
         mService = APITools.getAPI();
 
-        EighthGamesResponse roundOf16 = PersistenceHawk.getSteps(GameStep.ROUND_OF_16);
+        gamesDB = PersistenceHawk.getSteps(GameStep.ROUND_OF_16);
 
-        if(roundOf16 == null || roundOf16.getGames().size() <= 0) {
+//        if(roundOf16 == null || roundOf16.getGames().size() <= 0) {
             mService.getAllGames()
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -183,15 +184,20 @@ public class GameActivity extends AppCompatActivity
 
                         @Override
                         public void onNext(EighthGamesResponse game) {
-                            games = game;
+
+//                            if(gamesDB != null || gamesDB.getGames().size() > 0) {
+//                                games = gamesDB;
+//                            } else {
+                                games = game;
+//                            }
                             mAdapter.update(game, GameAction.TEAM_DONE);
                         }
                     });
-        } else {
-            setupAdapterGames();
-            games = roundOf16;
-            mAdapter.update(games, GameAction.TEAM_DONE);
-        }
+//        } else {
+//            setupAdapterGames();
+//            games = roundOf16;
+//            mAdapter.update(games, GameAction.TEAM_DONE);
+//        }
 
     }
 
@@ -229,24 +235,13 @@ public class GameActivity extends AppCompatActivity
             mAdapter.update(games, GameAction.TEAM_DONE);
             PersistenceHawk.setSteps(GameStep.ROUND_OF_16, games);
             fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
+            mAdapter.updateAction(false);
         } else {
             mAdapter.update(games, GameAction.TEAM_EDIT);
-            setupAdapterGames();
             fabGame.setImageDrawable(getResources().getDrawable(R.drawable.ic_done));
+            mAdapter.updateAction(true);
         }
     }
-
-    static final ButterKnife.Action<View> DISABLE = new ButterKnife.Action<View>() {
-        @Override public void apply(View view, int index) {
-            view.setEnabled(false);
-        }
-    };
-
-    static final ButterKnife.Setter<View, Boolean> ENABLED = new ButterKnife.Setter<View, Boolean>() {
-        @Override public void set(View view, Boolean value, int index) {
-            view.setEnabled(value);
-        }
-    };
 
     @Override
     public void onBackPressed() {
