@@ -185,12 +185,12 @@ public class GameActivity extends AppCompatActivity
                         @Override
                         public void onNext(EighthGamesResponse game) {
 
-//                            if(gamesDB != null || gamesDB.getGames().size() > 0) {
-//                                games = gamesDB;
-//                            } else {
+                            if(gamesDB != null || gamesDB.getGames().size() > 0) {
+                                games = gamesDB;
+                            } else {
                                 games = game;
-//                            }
-                            mAdapter.update(game, GameAction.TEAM_DONE);
+                            }
+                            mAdapter.update(games, GameAction.TEAM_DONE);
                         }
                     });
 //        } else {

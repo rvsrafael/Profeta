@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.profetadabola.Navigator;
 import com.profetadabola.R;
 import com.profetadabola.api.model.EighthGamesResponse;
 import com.profetadabola.tools.DateUtil;
@@ -125,39 +124,39 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
     public void update(EighthGamesResponse items, GameAction action) {
 
-//        switch (action) {
-//            case TEAM_A_GOAL_LESS: {
-//                isVisibility = true;
-//                break;
-//            }
-//            case TEAM_A_GOAL_MORE: {
-//                isVisibility = true;
-//                break;
-//            }
-//            case TEAM_B_GOAL_LESS: {
-//                isVisibility = true;
-//                break;
-//            }
-//            case TEAM_B_GOAL_MORE: {
-//                isVisibility = true;
-//                break;
-//            }
-//            case TEAM_MAP: {
-//                isVisibility = false;
-//                break;
-//            }
-//            case TEAM_EDIT: {
-//                isVisibility = true;
-//                break;
-//            }
-//            case TEAM_DONE: {
-//                isVisibility = false;
-//                break;
-//            }
-//        }
-//
-//        games = items;
-//        notifyDataSetChanged();
+        switch (action) {
+            case TEAM_A_GOAL_LESS: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_A_GOAL_MORE: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_B_GOAL_LESS: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_B_GOAL_MORE: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_MAP: {
+                isVisibility = false;
+                break;
+            }
+            case TEAM_EDIT: {
+                isVisibility = true;
+                break;
+            }
+            case TEAM_DONE: {
+                isVisibility = false;
+                break;
+            }
+        }
+
+        games = items;
+        notifyDataSetChanged();
     }
 
     public static class GameViewHolder extends RecyclerView.ViewHolder {
