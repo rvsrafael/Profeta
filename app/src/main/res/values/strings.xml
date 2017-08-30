@@ -41,9 +41,5 @@
     <string name="error_conection_login">There was a problem, please try again later</string>
     <string name="cancel_conection_login">Access has been revoked</string>
 
-    <!--Crashlytics
-    <string name="fabric_apiKey">10f095e76ef3f4b8f530fcf41963c0f84cec7441</string>-->
-
-
 
 </resources>
