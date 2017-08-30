@@ -1,11 +1,20 @@
 package com.profetadabola.main.games;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.profetadabola.Navigator;
@@ -26,6 +36,12 @@ import com.profetadabola.api.APITools;
 import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.api.model.EighthGamesResponse;
 import com.profetadabola.tools.PersistenceHawk;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +78,7 @@ public class GameActivity extends AppCompatActivity
     private EighthGamesResponse games;
     private EighthGamesResponse gamesDB;
 
+    private static final int SOLICITAR_PERMISSAO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +245,12 @@ public class GameActivity extends AppCompatActivity
         toggle.syncState();
     }
 
+
+    @OnClick(R.id.button_share)
+    void share(View view){
+        checarPermissao();
+    }
+
     @OnClick(R.id.fab)
     void fab(View view){
 
@@ -277,4 +300,86 @@ public class GameActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void checarPermissao(){
+
+        // Verifica  o estado da permissão de WRITE_EXTERNAL_STORAGE
+        int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // Se for diferente de PERMISSION_GRANTED, então vamos exibir a tela padrão
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, SOLICITAR_PERMISSAO);
+        } else {
+            // Senão vamos compartilhar a imagem
+            //sharedImage();
+            takeScreenshot();
+        }
+    }
+
+    private void sharedImage(File imageFile) {
+        // Vamos carregar a imagem em um bitmap
+//        Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+        Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        //setamos o tipo da imagem
+        share.setType("image/jpeg");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // comprimomos a imagem
+        b.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        // Gravamos a imagem
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), b, "Titulo da Imagem", null);
+        // criamos uam Uri com o endereço que a imagem foi salva
+        Uri imageUri =  Uri.parse(path);
+        // Setmaos a Uri da imagem
+        share.putExtra(Intent.EXTRA_STREAM, imageFile);
+        // chama o compartilhamento
+        startActivity(Intent.createChooser(share, "Selecione"));
+    }
+
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            sharedImage(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
+
+
+
+
+
+
+    }
+
+
+
+
 }
