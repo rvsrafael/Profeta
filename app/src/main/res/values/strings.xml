@@ -40,6 +40,7 @@
     <string name="fb_login_protocol_scheme">fb165584313989374</string>
     <string name="error_conection_login">There was a problem, please try again later</string>
     <string name="cancel_conection_login">Access has been revoked</string>
+    <string name="action_share">Share</string>
 
 
 </resources>
