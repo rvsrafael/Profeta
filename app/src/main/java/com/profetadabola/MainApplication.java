@@ -15,7 +15,7 @@ public class MainApplication extends Application {
         super.onCreate();
         setupStetho();
         setupHawk();
-        //setupCrashlytics();
+        setupCrashlytics();
     }
 
     private void setupStetho() {

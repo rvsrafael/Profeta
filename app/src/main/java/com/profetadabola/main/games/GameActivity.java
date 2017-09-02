@@ -246,7 +246,7 @@ public class GameActivity extends AppCompatActivity
     }
 
 
-    @OnClick(R.id.button_share)
+    @OnClick(R.id.button_share_profeta)
     void share(View view){
         checarPermissao();
     }
@@ -311,75 +311,33 @@ public class GameActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, SOLICITAR_PERMISSAO);
         } else {
             // Senão vamos compartilhar a imagem
-            //sharedImage();
-            takeScreenshot();
+            sharedImage();
+            //takeScreenshot();
         }
     }
 
-    private void sharedImage(File imageFile) {
-        // Vamos carregar a imagem em um bitmap
+    private void sharedImage() {
 //        Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
-        Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+
+        View v1 = getWindow().getDecorView().getRootView();
+        v1.setDrawingCacheEnabled(true);
+
+
+        //Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+        Bitmap b = Bitmap.createBitmap(v1.getDrawingCache());
+
+
         Intent share = new Intent(Intent.ACTION_SEND);
-        //setamos o tipo da imagem
         share.setType("image/jpeg");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        // comprimomos a imagem
         b.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        // Gravamos a imagem
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), b, "Titulo da Imagem", null);
-        // criamos uam Uri com o endereço que a imagem foi salva
+
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), b, "Profeta", null);
+
         Uri imageUri =  Uri.parse(path);
-        // Setmaos a Uri da imagem
-        share.putExtra(Intent.EXTRA_STREAM, imageFile);
-        // chama o compartilhamento
+        share.putExtra(Intent.EXTRA_STREAM, imageUri);
         startActivity(Intent.createChooser(share, "Selecione"));
-    }
-
-    private void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-            // create bitmap screen capture
-            View v1 = getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-            sharedImage(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-    }
-
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
-
-
-
-
-
 
     }
-
-
-
 
 }
