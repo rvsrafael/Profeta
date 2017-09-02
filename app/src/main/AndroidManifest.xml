@@ -67,6 +67,23 @@
             android:label="@string/title_activity_maps"></activity>
 
 
+        <service android:name=".push.PushInstanceIdService" >
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT">
+
+                </action>
+            </intent-filter>
+        </service>
+
+
+        <service android:name=".push.PushMessagingServic" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT">
+
+                </action>
+            </intent-filter>
+        </service>
+
 
     </application>
 

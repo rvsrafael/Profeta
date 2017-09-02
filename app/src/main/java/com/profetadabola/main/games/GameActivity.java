@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.profetadabola.Navigator;
 import com.profetadabola.R;
 import com.profetadabola.about.AboutActivity;
@@ -92,6 +93,11 @@ public class GameActivity extends AppCompatActivity
         setupGames();
         setupAdapterGames();
         setupFab();
+        setupPush();
+    }
+
+    private void setupPush() {
+        FirebaseMessaging.getInstance().subscribeToTopic("profeta");
     }
 
     private void setupToolbar() {
