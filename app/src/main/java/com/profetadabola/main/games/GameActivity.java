@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.profetadabola.Navigator;
@@ -79,8 +80,8 @@ public class GameActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         context = this;
-        loadingArguments(savedInstanceState);
         init();
+        loadingArguments(savedInstanceState);
     }
 
     private void init() {
@@ -212,19 +213,33 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void loadingArguments(Bundle savedInstanceState) {
-        String username;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                username= null;
-            } else {
-                username= extras.getString("username");
-            }
+
+        String userNamePref = PersistenceHawk.getValueString("username");
+
+        if (userNamePref != null && userNamePref != "") {
+            setUserLoading(userNamePref);
         } else {
-            username= (String) savedInstanceState.getSerializable("username");
+            String username;
+            if (savedInstanceState == null) {
+                Bundle extras = getIntent().getExtras();
+                if(extras != null) {
+                    username = extras.getString("username");
+                    setUserLoading(username);
+                }
+            }  else {
+                username = (String) savedInstanceState.getSerializable("username");
+                setUserLoading(username);
+            }
         }
 
-        Toast.makeText(this, "Welcome "+username,Toast.LENGTH_LONG).show();
+
+
+    }
+
+    private void setUserLoading(String username) {
+        TextView textViewNavbarUser =  (TextView)findViewById(R.id.textview_navbar_user);
+        //textViewNavbarUser.setText("Olá" +username);
+        PersistenceHawk.setValueString("username", username);
     }
 
     private void setupNavigation() {
