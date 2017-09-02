@@ -2,12 +2,16 @@ package com.profetadabola.main.games;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,9 +30,11 @@ import com.profetadabola.R;
 import com.profetadabola.about.AboutActivity;
 import com.profetadabola.api.API;
 import com.profetadabola.api.APITools;
-import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.api.model.EighthGamesResponse;
+import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.tools.PersistenceHawk;
+
+import java.io.ByteArrayOutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +70,7 @@ public class GameActivity extends AppCompatActivity
     private Context context;
     private EighthGamesResponse games;
     private EighthGamesResponse gamesDB;
+    static final int SOLICITAR_PERMISSAO = 1;
 
 
     @Override
@@ -173,40 +180,34 @@ public class GameActivity extends AppCompatActivity
 
         gamesDB = PersistenceHawk.getSteps(GameStep.ROUND_OF_16);
 
-//        if(roundOf16 == null || roundOf16.getGames().size() <= 0) {
-            mService.getAllGames()
-                    .subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<EighthGamesResponse>() {
-                        @Override
-                        public void onCompleted() {
-                            setupGames();
-                        }
+        mService.getAllGames()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<EighthGamesResponse>() {
+                    @Override
+                    public void onCompleted() {
+                        setupGames();
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Toast.makeText(getApplicationContext(), "Ocorreu uma falha",
-                                    Toast.LENGTH_LONG).show();
-                            Log.e("MAPS", e.getMessage());
-                        }
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getApplicationContext(), "Ocorreu uma falha",
+                                Toast.LENGTH_LONG).show();
+                        Log.e("MAPS", e.getMessage());
+                    }
 
-                        @Override
-                        public void onNext(EighthGamesResponse game) {
+                    @Override
+                    public void onNext(EighthGamesResponse game) {
 
-                            if(gamesDB != null && gamesDB.getGames().size() > 0) {
-                                games = gamesDB;
-                            } else {
-                                games = game;
-                            }
-                            mAdapter.update(games, GameAction.TEAM_DONE);
+                        if(gamesDB != null && gamesDB.getGames().size() > 0) {
+                            games = gamesDB;
+                        } else {
+                            games = game;
                         }
-                    });
-//        } else {
-//            setupAdapterGames();
-//            games = roundOf16;
-//            mAdapter.update(games, GameAction.TEAM_DONE);
-//        }
+                        mAdapter.update(games, GameAction.TEAM_DONE);
+                    }
+                });
 
     }
 
@@ -291,7 +292,7 @@ public class GameActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                sharePalpite();
+                checarPermissao();
                 return true;
 
             default:
@@ -300,15 +301,45 @@ public class GameActivity extends AppCompatActivity
         }
     }
 
-    private void sharePalpite() {
-        Toast.makeText(context, "compartilhado", Toast.LENGTH_LONG).show();
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
          getMenuInflater().inflate(R.menu.action_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void checarPermissao(){
+
+        // Verifica  o estado da permissão de WRITE_EXTERNAL_STORAGE
+        int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // Se for diferente de PERMISSION_GRANTED, então vamos exibir a tela padrão
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, SOLICITAR_PERMISSAO);
+        } else {
+            // Senão vamos compartilhar a imagem
+            sharedImage();
+            //takeScreenshot();
+        }
+    }
+
+    private void sharedImage() {
+
+        View v1 = getWindow().getDecorView().getRootView();
+        v1.setDrawingCacheEnabled(true);
+
+        Bitmap b = Bitmap.createBitmap(v1.getDrawingCache());
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), b, "Profeta", null);
+
+        Uri imageUri =  Uri.parse(path);
+        share.putExtra(Intent.EXTRA_STREAM, imageUri);
+        startActivity(Intent.createChooser(share, "Selecione"));
+
     }
 
 
