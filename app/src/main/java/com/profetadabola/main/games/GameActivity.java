@@ -1,15 +1,11 @@
 package com.profetadabola.main.games;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.profetadabola.Navigator;
@@ -33,15 +28,11 @@ import com.profetadabola.R;
 import com.profetadabola.about.AboutActivity;
 import com.profetadabola.api.API;
 import com.profetadabola.api.APITools;
-import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.api.model.EighthGamesResponse;
+import com.profetadabola.api.model.GameResponse;
 import com.profetadabola.tools.PersistenceHawk;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -317,15 +308,13 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void sharedImage() {
-//        Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
 
-        View v1 = getWindow().getDecorView().getRootView();
+
+//        View v1 = getWindow().getDecorView().getRootView();
+        View v1 = recyclerviewGames.getRootView();
         v1.setDrawingCacheEnabled(true);
 
-
-        //Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
         Bitmap b = Bitmap.createBitmap(v1.getDrawingCache());
-
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");

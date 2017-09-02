@@ -39,6 +39,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
     @Override
     public void onBindViewHolder(GameViewHolder holder, final int position) {
+
         holder.textviewLabelTeamA.setText(games.getGames().get(position).getTeamA().getName());
         holder.textviewLabelTeamB.setText(games.getGames().get(position).getTeamB().getName());
         holder.textviewLabelGoalA.setText(games.getGames().get(position).getTeamA().getGoal());
