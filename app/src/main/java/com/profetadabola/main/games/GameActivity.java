@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -74,13 +77,19 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void init() {
-        setSupportActionBar(toolbar);
+        setupToolbar();
         setupDrawer();
         setupNavigation();
         loadGames();
         setupGames();
         setupAdapterGames();
         setupFab();
+    }
+
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupFab() {
@@ -277,4 +286,30 @@ public class GameActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite:
+                sharePalpite();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void sharePalpite() {
+        Toast.makeText(context, "compartilhado", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+         getMenuInflater().inflate(R.menu.action_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
 }
