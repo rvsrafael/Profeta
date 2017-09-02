@@ -290,7 +290,7 @@ public class GameActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_favorite:
+            case R.id.action_share:
                 sharePalpite();
                 return true;
 
