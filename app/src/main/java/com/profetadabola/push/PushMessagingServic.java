@@ -19,22 +19,15 @@ public class PushMessagingServic extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-
-        if( remoteMessage.getData().size() > 0){
-            //showNotificaion(remoteMessage.getData().get("Descreicao"),
-            //remoteMessage.getData().get("descricao));"
-        }
-
-        //Verfica se a mensage contem o payload
-
         if(remoteMessage.getNotification() != null) {
-            showNotification(
-                    remoteMessage.getNotification().getTitle(),
-                    remoteMessage.getNotification().getBody());
+            if(remoteMessage.getData().get("function") == "ranking"){
 
+            } else {
+                showNotification(
+                        remoteMessage.getNotification().getTitle(),
+                        remoteMessage.getNotification().getBody());
+            }
         };
-
-        
     }
 
     private void showNotification(String title, String body) {
@@ -53,7 +46,7 @@ public class PushMessagingServic extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle(title)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.soccer)
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
