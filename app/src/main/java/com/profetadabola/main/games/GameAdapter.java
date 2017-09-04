@@ -43,7 +43,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         holder.textviewLabelTeamB.setText(games.getGames().get(position).getTeamB().getName());
         holder.textviewLabelGoalA.setText(games.getGames().get(position).getTeamA().getGoal());
         holder.textviewLabelGoalB.setText(games.getGames().get(position).getTeamB().getGoal());
-        holder.textviewLabelStadium.setText(games.getGames().get(position).getStadium());
+        //holder.textviewLabelStadium.setText(games.getGames().get(position).getStadium());
 
 
         String dateFormat = DateUtil.formatDateGame(games.getGames().get(position).getDate());
