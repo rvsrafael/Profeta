@@ -1,17 +1,20 @@
 package com.profetadabola.about;
 
+
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v7.appcompat.BuildConfig;
-import android.util.Log;
-import android.widget.Button;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.profetadabola.R;
@@ -20,16 +23,35 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AboutActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class AboutFragment extends Fragment {
 
     @BindView(R.id.textview_version)
     TextView textviewVersion;
 
+
+    public AboutFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_about, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         init();
     }
 
@@ -41,14 +63,13 @@ public class AboutActivity extends AppCompatActivity {
         PackageInfo pInfo = null;
         String version = null;
         try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
             version = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         textviewVersion.setText(version);
     }
-
 
     @OnClick(R.id.button_call)
     void callPhone(){
@@ -57,11 +78,11 @@ public class AboutActivity extends AppCompatActivity {
         callIntent.putExtra("version",versionName);
         callIntent.setData(Uri.parse("tel:11996509610"));
 
-        if (ActivityCompat.checkSelfPermission(AboutActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(AboutFragment.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
 
         startActivity(callIntent);
     }
+
 }

@@ -42,5 +42,8 @@
     <string name="cancel_conection_login">Access has been revoked</string>
     <string name="action_share">Share</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -29,7 +32,7 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.profetadabola.Navigator;
 import com.profetadabola.R;
-import com.profetadabola.about.AboutActivity;
+import com.profetadabola.about.AboutFragment;
 import com.profetadabola.api.API;
 import com.profetadabola.api.APITools;
 import com.profetadabola.api.model.EighthGamesResponse;
@@ -287,6 +290,7 @@ public class GameActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Fragment fragment = null;
         int id = item.getItemId();
 
 
@@ -300,9 +304,14 @@ public class GameActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, item.getTitle(), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, AboutActivity.class);
-            startActivity(intent);
+            fragment = new AboutFragment();
+            fabGame.hide();
+            toolbar.setTitle(getString(R.string.title_activity_about));
         }
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container_main, fragment,  "fragment");
+        transaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
