@@ -29,6 +29,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.profetadabola.Navigator;
 import com.profetadabola.R;
@@ -37,6 +45,8 @@ import com.profetadabola.api.API;
 import com.profetadabola.api.APITools;
 import com.profetadabola.api.model.EighthGamesResponse;
 import com.profetadabola.api.model.GameResponse;
+import com.profetadabola.maps.MapsActivity;
+import com.profetadabola.maps.MapsFragment;
 import com.profetadabola.tools.PersistenceHawk;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +60,7 @@ import rx.schedulers.Schedulers;
 
 
 public class GameActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -76,6 +86,7 @@ public class GameActivity extends AppCompatActivity
     private EighthGamesResponse games;
     private EighthGamesResponse gamesDB;
     static final int SOLICITAR_PERMISSAO = 1;
+    private GoogleMap mMap;
 
 
     @Override
@@ -141,7 +152,15 @@ public class GameActivity extends AppCompatActivity
                         latitude = game.getLatitude();
                         longitude = game.getLongitude();
                         titlePin = game.getStadium();
-                        Navigator.startMaps(context,latitude,longitude,titlePin);
+
+                        MapFragment mMapFragment = MapFragment.newInstance();
+                        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.add(R.id.container_main, mMapFragment);
+                        fragmentTransaction.commit();
+                        fabGame.hide();
+                        toolbar.setTitle(getString(R.string.title_activity_maps));
+                        mMapFragment.getMapAsync(GameActivity.this);
+
                         break;
                     }
                 }
@@ -373,4 +392,17 @@ public class GameActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng localization = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(localization).title(titlePin).visible(true));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(localization));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(localization).zoom(16.0f).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mMap.moveCamera(cameraUpdate);
+    }
 }
