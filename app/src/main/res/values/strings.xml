@@ -41,6 +41,7 @@
     <string name="error_conection_login">There was a problem, please try again later</string>
     <string name="cancel_conection_login">Access has been revoked</string>
     <string name="action_share">Share</string>
+    <string name="stadium_more">+ STADIUM</string>
 
 
 </resources>
