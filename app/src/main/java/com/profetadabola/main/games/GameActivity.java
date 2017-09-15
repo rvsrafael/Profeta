@@ -141,7 +141,8 @@ public class GameActivity extends AppCompatActivity
                         latitude = game.getLatitude();
                         longitude = game.getLongitude();
                         titlePin = game.getStadium();
-                        checarPermissaoMap();
+//                        checarPermissaoMap();
+                        Navigator.startMaps(context,latitude,longitude,titlePin);
                         break;
                     }
                 }
@@ -347,7 +348,7 @@ public class GameActivity extends AppCompatActivity
         int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_MAP);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSAO_MAP);
         } else {
             navigationForMap();
         }
