@@ -16,7 +16,7 @@
         android:layout_width="74dp"
         android:layout_height="82dp"
         android:layout_marginBottom="@dimen/imageView_signin"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_marginTop="@dimen/imageView_signin"
         android:src="@drawable/img_splash_profeta"/>
 
@@ -40,7 +40,7 @@
                     android:id="@+id/input_layout_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="?android:attr/textColorHintInverse"
+                    android:textColorHint="@color/colorPrimary"
                     app:errorEnabled="true">
 
                     <EditText
@@ -52,7 +52,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:textColorHint="@color/gray"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/backgroundSignin" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -60,7 +60,7 @@
                     android:id="@+id/input_layout_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="?android:attr/textColorHintInverse"
+                    android:textColorHint="@color/colorPrimary"
                     app:errorEnabled="true"
                     app:passwordToggleEnabled="true"
                     app:passwordToggleTint="@color/backgroundSignin">
@@ -74,13 +74,13 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColorHint="@color/gray"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/backgroundSignin" />
 
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
                     android:id="@+id/button_signin"
-                    style="@style/AppTheme.Button.SignIn.Ring"
+                    style="@style/AppTheme.Button.GameAction"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
