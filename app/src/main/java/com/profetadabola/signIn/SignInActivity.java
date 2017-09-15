@@ -18,8 +18,10 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.profetadabola.Navigator;
 import com.profetadabola.R;
+import com.profetadabola.api.model.User;
 import com.profetadabola.main.games.GameActivity;
 import com.profetadabola.tools.InputValidator;
+import com.profetadabola.tools.PersistenceHawk;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,7 +94,7 @@ public class SignInActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_signin)
     void signIn(View view){
-
+        User userAutenticator= null;
         String error = null;
         String user = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
@@ -107,8 +109,13 @@ public class SignInActivity extends AppCompatActivity {
             passwordLayout.setError(error);
         }
 
-        if (password.equals(getString(R.string.PASSWORD_ADMIN)) &&
-                user.equals(getString(R.string.USERNAME_ADMIN))){
+
+        if(PersistenceHawk.getUser("syncUser") != null) {
+            userAutenticator = PersistenceHawk.getUser("syncUser");
+        }
+
+        if (password.equals(userAutenticator.getSenha()) &&
+                user.equals(userAutenticator.getUsuario())){
 
             Navigator.startGames(getApplicationContext(), user);
 
@@ -119,6 +126,7 @@ public class SignInActivity extends AppCompatActivity {
         }
 
     }
+
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
