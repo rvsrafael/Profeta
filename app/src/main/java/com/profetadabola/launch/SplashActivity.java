@@ -47,6 +47,8 @@ public class SplashActivity extends AppCompatActivity {
 
         if(PersistenceHawk.getUser("syncUser") == null){
             syncUserProfeta();
+        } else {
+            starProfeta();
         }
 
     }
@@ -60,11 +62,7 @@ public class SplashActivity extends AppCompatActivity {
                 .subscribe(new Subscriber<User>() {
                     @Override
                     public void onCompleted() {
-                        Intent intent = new Intent(SplashActivity.this,
-                                SignInActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                        SplashActivity.this.finish();
+                        starProfeta();
                     }
 
                     @Override
@@ -79,6 +77,14 @@ public class SplashActivity extends AppCompatActivity {
                         persistUser(user);
                     }
                 });
+    }
+
+    private void starProfeta() {
+        Intent intent = new Intent(SplashActivity.this,
+                SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        SplashActivity.this.finish();
     }
 
     private void persistUser(User user) {
