@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Profeta</string>
+    <string name="action_share">Compartilhar</string>
+    <string name="button_sign_in">Entar</string>
+    <string name="cancel_conection_login">O acesso foi revogado</string>
+    <string name="empty_email">O campo do email está vazio</string>
+    <string name="empty_password">O campo da senha está vazio</string>
+    <string name="error_conection_login">Ocorreu um problema, tente novamente mais tarde</string>
+    <string name="error_incorrect_signin">Usuário e / ou senha incorretos</string>
+    <string name="hint_password">senha</string>
+    <string name="hint_username">usuário</string>
+    <string name="label_contato">Contato</string>
+    <string name="menu_about">Sobre</string>
+    <string name="title_activity_about">Sobre</string>
+    <string name="title_activity_login">Entrar</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="welcome_app">Bem vindo</string>
+</resources>
