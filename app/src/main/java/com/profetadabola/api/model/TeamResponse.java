@@ -1,9 +1,5 @@
 package com.profetadabola.api.model;
 
-/**
- * Created by rafa on 19/07/17.
- */
-
 public class TeamResponse {
     private String name;
     private String icon;
