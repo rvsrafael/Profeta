@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.profetadabola.Manifest;
 import com.profetadabola.Navigator;
 import com.profetadabola.R;
 import com.profetadabola.about.AboutActivity;
@@ -72,7 +74,8 @@ public class GameActivity extends AppCompatActivity
     private Context context;
     private EighthGamesResponse games;
     private EighthGamesResponse gamesDB;
-    static final int SOLICITAR_PERMISSAO = 1;
+    static final int PERMISSAO_MAP = 1;
+    static final int PERMISSAO_SHARE = 1;
 
 
     @Override
@@ -138,13 +141,15 @@ public class GameActivity extends AppCompatActivity
                         latitude = game.getLatitude();
                         longitude = game.getLongitude();
                         titlePin = game.getStadium();
-                        Navigator.startMaps(context,latitude,longitude,titlePin);
+                        checarPermissaoMap();
                         break;
                     }
                 }
             }
         });
     }
+
+
 
     private void moreGoalTeamB(GameResponse game, int position) {
         int newGoal = Integer.parseInt(game.getTeamB().getGoal())+1;
@@ -329,18 +334,27 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void checarPermissao(){
-
-        // Verifica  o estado da permissão de WRITE_EXTERNAL_STORAGE
         int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            // Se for diferente de PERMISSION_GRANTED, então vamos exibir a tela padrão
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, SOLICITAR_PERMISSAO);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_SHARE);
         } else {
-            // Senão vamos compartilhar a imagem
             sharedImage();
-            //takeScreenshot();
         }
+    }
+
+    private void checarPermissaoMap(){
+        int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_MAP);
+        } else {
+            navigationForMap();
+        }
+    }
+
+    private void navigationForMap() {
+        Navigator.startMaps(context,latitude,longitude,titlePin);
     }
 
     private void sharedImage() {
@@ -363,5 +377,19 @@ public class GameActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_SHARE);
+
+        if (PERMISSAO_SHARE == requestCode
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            sharedImage();
+
+        } else if (PERMISSAO_MAP == requestCode
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            navigationForMap();
+        }
+    }
 }
