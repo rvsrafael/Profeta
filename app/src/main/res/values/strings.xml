@@ -43,5 +43,6 @@
     <string name="action_share">Share</string>
     <string name="stadium_more">+ STADIUM</string>
 
+    <string name="error_conection_sync_user">Ocorreu uma falha no sync de user.</string>
 
 </resources>

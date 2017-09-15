@@ -2,6 +2,7 @@ package com.profetadabola.tools;
 
 import com.orhanobut.hawk.Hawk;
 import com.profetadabola.api.model.EighthGamesResponse;
+import com.profetadabola.api.model.User;
 import com.profetadabola.main.games.GameStep;
 
 public class PersistenceHawk {
@@ -24,5 +25,13 @@ public class PersistenceHawk {
 
     public static EighthGamesResponse getSteps(GameStep key) {
         return Hawk.get(String.valueOf(key));
+    }
+
+    public static void setUser(String key, User user) {
+        Hawk.put(key, user);
+    }
+
+    public static User getUser(String key) {
+        return Hawk.get(key);
     }
 }
