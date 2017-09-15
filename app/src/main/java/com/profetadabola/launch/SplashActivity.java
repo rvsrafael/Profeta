@@ -24,6 +24,7 @@ import static com.profetadabola.api.APITools.syncUser;
 public class SplashActivity extends AppCompatActivity {
 
     private API mService;
+    private long SPLASH_DISPLAY_LENGTH = 3500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +43,24 @@ public class SplashActivity extends AppCompatActivity {
             imgSplash.clearAnimation();
             imgSplash.startAnimation(anim);
         }
+        startSplash();
+    }
 
-        if(PersistenceHawk.getUser("syncUser") == null){
-            syncUserProfeta();
-        } else {
-            starProfeta();
-        }
+    private void startSplash() {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(PersistenceHawk.getUser("syncUser") == null){
+                    syncUserProfeta();
+                } else {
+                    starProfeta();
+                }
+            }
+        }, SPLASH_DISPLAY_LENGTH);
 
     }
+
 
     private void syncUserProfeta() {
         mService = syncUser();
