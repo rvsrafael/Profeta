@@ -28,6 +28,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.profetadabola.Manifest;
 import com.profetadabola.Navigator;
@@ -297,15 +299,10 @@ public class GameActivity extends AppCompatActivity
         int id = item.getItemId();
 
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_exit) {
+            logoffUser();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_about) {
             Toast.makeText(this, item.getTitle(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
@@ -314,6 +311,16 @@ public class GameActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logoffUser() {
+        if(isLoggedInFacebook()) {
+            LoginManager.getInstance().logOut();
+            finish();
+        } else {
+            finish();
+        }
+
     }
 
     @Override
@@ -393,5 +400,10 @@ public class GameActivity extends AppCompatActivity
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             navigationForMap();
         }
+    }
+
+    private boolean isLoggedInFacebook() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
     }
 }

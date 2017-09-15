@@ -16,4 +16,5 @@
     <string name="title_activity_login">Entrar</string>
     <string name="title_activity_maps">Mapa</string>
     <string name="welcome_app">Bem vindo</string>
+    <string name="menu_exit">Sair</string>
 </resources>
