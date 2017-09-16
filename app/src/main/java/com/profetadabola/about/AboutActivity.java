@@ -93,9 +93,8 @@ public class AboutActivity extends AppCompatActivity {
 
         if (PERMISSAO_CALL == requestCode
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
             callPhone();
-
+            return;
         }
     }
 }

@@ -395,12 +395,16 @@ public class GameActivity extends AppCompatActivity
         if (PERMISSAO_SHARE == requestCode
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             sharedImage();
+            return;
 
         } else if (PERMISSAO_MAP == requestCode
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             navigationForMap();
+            return;
         }
     }
+
+
 
     private boolean isLoggedInFacebook() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
